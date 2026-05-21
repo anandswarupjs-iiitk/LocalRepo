@@ -1,73 +1,155 @@
-# React + TypeScript + Vite
+# FraudGuard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+FraudGuard is an AI-powered fraud detection and transaction monitoring platform built with React, TypeScript, and Tailwind CSS.
 
-Currently, two official plugins are available:
+The platform analyzes transaction behavior in real time, assigns dynamic risk scores, detects anomalies, and provides security recommendations through an interactive fintech dashboard interface.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### AI Risk Scoring
+- Real-time transaction risk analysis
+- Composite fraud score (0–100)
+- Behavioral anomaly detection
+- Confidence percentage evaluation
 
-## Expanding the ESLint configuration
+### Live Fraud Monitoring
+- Continuous suspicious activity tracking
+- Dynamic fraud alert widgets
+- Real-time transaction logs
+- Visual risk indicators
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Behavioral Analytics
+- User spending pattern analysis
+- Monthly transaction trends
+- Category-based insights
+- Expense monitoring dashboards
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Security Layer
+- JWT authentication architecture
+- bcrypt password hashing
+- Rate limiting middleware
+- Input validation and sanitization
+- Injection prevention concepts
+- Helmet.js security headers
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Interactive Risk Engine Demo
+- Adjustable fraud signal simulation
+- Real-time score recalculation
+- AI-generated security recommendations
+- Dynamic risk visualization
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## Tech Stack
+
+### Frontend
+- React
+- TypeScript
+- Tailwind CSS
+- Vite
+
+### Styling
+- Tailwind utility classes
+- Responsive UI design
+- Custom animations
+- Gradient/glassmorphism effects
+
+### Concepts Demonstrated
+- Component-based architecture
+- State management with React Hooks
+- Dynamic rendering
+- Real-time UI updates
+- Interactive dashboards
+
+---
+
+## Project Structure
+
+```bash
+src/
+│
+├── assets/
+├── App.tsx
+├── main.tsx
+├── index.css
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Main sections include:
+- Navbar
+- Hero Section
+- Live Fraud Monitor
+- Features Grid
+- Risk Engine Demo
+- Security Section
+- CTA Section
+- Footer
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Installation
+
+Clone the repository:
+
+```bash
+git clone <your-repo-link>
 ```
+
+Move into the project folder:
+
+```bash
+cd fraudguard
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+---
+
+## Future Improvements
+
+- Backend integration
+- Real ML fraud detection model
+- Database integration
+- Authentication system
+- Transaction APIs
+- WebSocket live monitoring
+- Admin dashboard
+- Email/SMS alerts
+- Dark/light theme switching
+
+---
+
+## Screens Included
+
+- Fraud monitoring dashboard
+- AI risk scoring engine
+- Live transaction alerts
+- Security analytics UI
+- Responsive mobile navigation
+
+---
+
+## Purpose
+
+FraudGuard was designed as a modern fintech security platform concept showcasing:
+- cybersecurity-oriented UI design
+- fraud detection workflows
+- real-time monitoring systems
+- AI-powered analytics interfaces
+
+---
+
+## License
+
+This project is for educational and portfolio purposes.
