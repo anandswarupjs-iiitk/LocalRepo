@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 // ─── TYPES ────────────────────────────────────────────────────────────────────
@@ -29,14 +30,7 @@ const SIGNALS = [
   { label: "Repeated Tx", weight: 10, color: "#38bdf8" },
 ];
 
-const PAGES = [
-  { num: "04", name: "Dashboard", tag: "Key", desc: "Balance overview, fraud summary panel, analytics charts, recent transactions." },
-  { num: "07", name: "Fraud Monitor", tag: "Key", desc: "Live suspicious log, AI risk meter, confidence %, security suggestions." },
-  { num: "05", name: "Transactions", desc: "Paginated table, search/filter, send simulation, status badges." },
-  { num: "06", name: "Analytics", desc: "Expense pie charts, monthly bar charts, income vs expense comparison." },
-  { num: "02", name: "Login", desc: "Secure JWT auth with full input validation and error handling." },
-  { num: "08", name: "Profile / Settings", desc: "User info, password update, 2FA configuration." },
-];
+
 
 
 // ─── NAVBAR ───────────────────────────────────────────────────────────────────
@@ -71,9 +65,18 @@ function Navbar() {
           ))}
         </div>
 
+        
         <div className="hidden md:flex items-center gap-3">
-          <button className="text-xs text-slate-400 hover:text-white px-4 py-2.5 rounded-lg border border-white/10 hover:border-white/25 transition-all" style={{ fontFamily: "DM Mono, monospace" }}>LOG IN</button>
-          <button className="text-xs text-black font-bold bg-orange-500 hover:bg-orange-400 px-5 py-2.5 rounded-lg transition-all hover:shadow-lg hover:shadow-orange-500/30 hover:-translate-y-0.5" style={{ fontFamily: "DM Mono, monospace" }}>SIGN UP</button>
+          <Link to="/login">
+            <button className="text-xs text-slate-400 hover:text-white px-4 py-2.5 rounded-lg border border-white/10 hover:border-white/25 transition-all">
+              LOG IN
+            </button>
+          </Link>
+          <Link to="/signup">
+            <button className="text-xs text-black font-bold bg-orange-500 hover:bg-orange-400 px-5 py-2.5 rounded-lg transition-all hover:shadow-lg hover:shadow-orange-500/30 hover:-translate-y-0.5">
+              SIGN UP
+            </button>
+          </Link>
         </div>
 
         <button className="md:hidden text-slate-400" onClick={() => setOpen(!open)}>
@@ -90,10 +93,12 @@ function Navbar() {
           {["Features", "Engine", "Pages", "Security"].map((l) => (
             <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setOpen(false)} className="block text-xs tracking-widest uppercase text-slate-300 hover:text-orange-400" style={{ fontFamily: "DM Mono, monospace" }}>{l}</a>
           ))}
-          <div className="pt-4 flex flex-col gap-3">
+          <Link to="/login">
             <button className="w-full border border-white/15 text-white text-xs tracking-widest py-3 rounded-lg" style={{ fontFamily: "DM Mono, monospace" }}>LOG IN</button>
+          </Link>
+          <Link to="/signup">
             <button className="w-full bg-orange-500 text-black text-xs tracking-widest font-bold py-3 rounded-lg" style={{ fontFamily: "DM Mono, monospace" }}>SIGN UP FREE</button>
-          </div>
+          </Link>
         </div>
       )}
     </nav>
@@ -398,8 +403,12 @@ function CTA() {
             <h2 className="font-black text-4xl md:text-5xl text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>Detect suspicious transactions<br /><span className="text-orange-500">instantly with intelligent risk scoring.</span></h2>
             <p className="text-slate-400 text-sm mb-10 max-w-md mx-auto leading-relaxed">AI fraud detection that actually works. This isn't a transaction app — it's a security intelligence platform.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="font-black text-sm text-black bg-orange-500 hover:bg-orange-400 px-8 py-4 rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-orange-500/30" style={{ fontFamily: "Syne, sans-serif" }}>CREATE FREE ACCOUNT</button>
-              <button className="text-xs tracking-widest text-slate-300 border border-white/15 hover:border-orange-500/40 px-8 py-4 rounded-xl hover:bg-orange-500/5 transition-all" style={{ fontFamily: "DM Mono, monospace" }}>LOGIN TO DASHBOARD</button>
+              <Link to="/signup">
+                <button className="font-black text-sm text-black bg-orange-500 hover:bg-orange-400 px-8 py-4 rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-orange-500/30" style={{ fontFamily: "Syne, sans-serif" }}>CREATE FREE ACCOUNT</button>
+              </Link>
+              <Link to="/login">
+                <button className="text-xs tracking-widest text-slate-300 border border-white/15 hover:border-orange-500/40 px-8 py-4 rounded-xl hover:bg-orange-500/5 transition-all" style={{ fontFamily: "DM Mono, monospace" }}>LOGIN TO DASHBOARD</button>
+              </Link>
             </div>
           </div>
         </div>
@@ -470,6 +479,7 @@ export default function App() {
       {/* <PagesSection /> */}
       <SecuritySection />
       <CTA />
+
       <Footer />
     </div>
   );
