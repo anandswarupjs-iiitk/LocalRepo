@@ -1,13 +1,14 @@
 const request = require('supertest');
 const app = require('../../app');
 
+const testEmail = `test${Date.now()}@test.com`;
 let token = '';
 
 describe('Auth Routes', () => {
   it('should register a new user', async () => {
     const res = await request(app)
       .post('/api/auth/register')
-      .send({ name: 'Test User', email: 'test123@test.com', password: 'Test@1234' });
+      .send({ name: 'Test User', email: testEmail, password: 'Test@1234' });
     expect(res.statusCode).toBe(201);
     expect(res.body.success).toBe(true);
     expect(res.body.token).toBeDefined();
@@ -16,7 +17,7 @@ describe('Auth Routes', () => {
   it('should login with valid credentials', async () => {
     const res = await request(app)
       .post('/api/auth/login')
-      .send({ email: 'test123@test.com', password: 'Test@1234' });
+      .send({ email: testEmail, password: 'Test@1234' });
     expect(res.statusCode).toBe(200);
     expect(res.body.token).toBeDefined();
     token = res.body.token;
@@ -25,7 +26,7 @@ describe('Auth Routes', () => {
   it('should reject login with wrong password', async () => {
     const res = await request(app)
       .post('/api/auth/login')
-      .send({ email: 'test123@test.com', password: 'WrongPass@1' });
+      .send({ email: testEmail, password: 'WrongPass@1' });
     expect(res.statusCode).toBe(401);
     expect(res.body.success).toBe(false);
   });
