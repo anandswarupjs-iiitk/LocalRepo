@@ -94,3 +94,81 @@ exports.logout = async (req, res) => {
 exports.getMe = async (req, res) => {
   res.status(200).json({ success: true, user: req.user });
 };
+
+const speakeasy = require('speakeasy');
+const QRCode = require('qrcode');
+
+exports.setup2FA = async (req, res, next) => {
+  try {
+    const secret = speakeasy.generateSecret({ name: `FraudGuard (${req.user.email})` });
+
+    await User.findByIdAndUpdate(req.user._id, { twoFactorSecret: secret.base32 });
+
+    const qrCode = await QRCode.toDataURL(secret.otpauth_url);
+
+    res.status(200).json({ success: true, qrCode, secret: secret.base32 });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.verify2FA = async (req, res, next) => {
+  try {
+    const { token } = req.body;
+    const user = await User.findById(req.user._id).select('+twoFactorSecret');
+
+    const verified = speakeasy.totp.verify({
+      secret: user.twoFactorSecret,
+      encoding: 'base32',
+      token,
+      window: 1,
+    });
+
+    if (!verified) {
+      return res.status(400).json({ success: false, message: 'Invalid 2FA token' });
+    }
+
+    await User.findByIdAndUpdate(req.user._id, { twoFactorEnabled: true });
+
+    await ActivityLog.create({
+      user: req.user._id,
+      event: '2FA_ENABLED',
+      ip: req.ip,
+      userAgent: req.headers['user-agent'],
+    });
+
+    res.status(200).json({ success: true, message: '2FA enabled successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.refreshToken = async (req, res, next) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(401).json({ success: false, message: 'No refresh token provided' });
+    }
+
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({ success: false, message: 'Invalid refresh token' });
+    }
+
+    const { token: newToken, refreshToken: newRefreshToken } = generateTokens(user._id);
+
+    await ActivityLog.create({
+      user: user._id,
+      event: 'TOKEN_REFRESHED',
+      ip: req.ip,
+      userAgent: req.headers['user-agent'],
+    });
+
+    res.status(200).json({ success: true, token: newToken, refreshToken: newRefreshToken });
+  } catch (error) {
+    return res.status(401).json({ success: false, message: 'Refresh token invalid or expired' });
+  }
+};
