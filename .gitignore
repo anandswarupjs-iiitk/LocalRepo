@@ -1,3 +1,6 @@
+node_modules/
+.env
+<<<<<<< HEAD
 # Logs
 logs
 *.log
@@ -22,3 +25,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+=======
+logs/
+>>>>>>> 7e7cfcf (feat: add 2FA, session hardening, activity logging, and token refresh)
