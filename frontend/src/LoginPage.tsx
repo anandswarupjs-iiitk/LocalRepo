@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // ─── LOGIN PAGE ───────────────────────────────────────────────────────────────
 export default function LoginPage() {
@@ -9,6 +9,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [tick, setTick] = useState(0);
+  const navigate = useNavigate();
 
   // Animate the live threat ticker
   useEffect(() => {
@@ -24,8 +25,9 @@ export default function LoginPage() {
     "First-time recipient · ₹12,500 flagged",
   ];
 
-  const handleSubmit = () => {
-   if (!email || !password) {
+  const handleSubmit = async () => {
+
+  if (!email || !password) {
     setError("All fields required.");
     return;
   }
@@ -33,7 +35,61 @@ export default function LoginPage() {
   setError("");
   setLoading(true);
 
-  setTimeout(() => setLoading(false), 2000);
+  try {
+
+    // TEMP DEMO ACCOUNT
+    if (
+      email === "durai@gmail.com" &&
+      password === "durai123"
+    ) {
+
+      localStorage.setItem("demoUser", email);
+
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1000);
+
+      return;
+    }
+
+    // FUTURE BACKEND LOGIN
+    // This will work later when backend is ready
+
+    const response = await fetch(
+      "http://localhost:5000/api/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Login failed");
+    }
+
+    localStorage.setItem("token", data.token);
+
+    navigate("/dashboard");
+
+  } catch (err: any) {
+
+    setError(
+      "Invalid credentials or backend unavailable."
+    );
+
+  } finally {
+
+    setLoading(false);
+
+  }
 };
 
   return (
