@@ -1,6 +1,8 @@
 const Transaction = require("../models/Transaction");
 const FraudLog = require("../models/FraudLog");
 const calculateRisk = require("../ai/fraudService"); // fixed: moved to top level
+const generateConfidence = require("../ai/confidenceEngine");
+const createNotification = require("../ai/notificationService");
 
 // Create transaction
 const createTransaction = async (req, res, next) => {
@@ -26,6 +28,10 @@ const createTransaction = async (req, res, next) => {
             receiver
         );
 
+        const confidenceResult = generateConfidence(
+            fraudResult
+        );
+
         const transaction = await Transaction.create({
             amount,
             merchant,
@@ -34,10 +40,26 @@ const createTransaction = async (req, res, next) => {
             fraudFlag: fraudResult.fraudFlag,
             riskScore: fraudResult.riskScore,
             riskLevel: fraudResult.riskLevel,
-            riskPercentage: fraudResult.riskPercentage
+            riskPercentage: fraudResult.riskPercentage,
+
+            confidence: confidenceResult.confidencePercentage,
+
+            recommendation: confidenceResult.recommendation
         });
 
         const io = req.app.get("io");
+
+        await createNotification(
+
+            io,
+
+            req.user._id,
+
+            "ACTIVITY",
+
+            `Transaction of ₹${amount} created`
+
+        );
 
         io.emit("transactionCreated", transaction);
 
@@ -56,6 +78,18 @@ const createTransaction = async (req, res, next) => {
                 riskLevel: fraudResult.riskLevel,
                 transaction
             });
+
+            await createNotification(
+
+                io,
+                        
+                req.user._id,
+                        
+                "FRAUD",
+                        
+                "Suspicious transaction detected"
+                        
+            );
         }
 
         res.status(201).json(transaction);

@@ -76,6 +76,20 @@ const transactionSchema = new mongoose.Schema(
         default:"0%"
     
     },
+    
+    confidence: {
+
+        type: String,
+
+        default: "0%"
+
+    },
+
+    recommendation: {
+
+        type: String
+
+    },
 
 },
 {
